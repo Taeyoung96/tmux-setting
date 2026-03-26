@@ -1,0 +1,128 @@
+# tmux-config
+
+Ubuntu 환경을 위한 tmux dotfiles. 새 머신에서 `bash install.sh` 한 번으로 전체 환경을 복원합니다.
+
+## 미리보기
+
+**Status Bar**: `[세션] ... [디렉토리] [ main ↑2↓1] [ 12%] [ 34%] [ 03/26 14:30]`
+
+- git 브랜치 + remote 대비 ahead/behind 자동 표시
+- Catppuccin Mocha 테마
+- Active pane: 흰색 굵은 테두리로 강조
+
+## 빠른 시작
+
+```bash
+git clone https://github.com/YOUR_USERNAME/tmux-config.git ~/tmux-config
+cd ~/tmux-config
+bash install.sh
+```
+
+설치 후 터미널을 재시작하거나:
+```bash
+tmux source ~/.tmux.conf
+```
+
+## 요구 사항
+
+- Ubuntu 20.04+ / Debian 11+
+- `git` (설치 스크립트가 `tmux`, `xclip`은 자동 설치)
+- (선택) `yazi` — Prefix+Tab 파일 탐색기 사용 시
+
+## 파일 구조
+
+```
+tmux-config/
+├── .tmux.conf              # tmux 메인 설정
+├── scripts/
+│   └── git-status.sh       # git 브랜치/ahead/behind 스크립트
+├── install.sh              # 원커맨드 설치 스크립트
+├── CLAUDE.md               # Claude Code 자동 로드용
+├── prompt.md               # Claude.ai 웹용 프롬프트
+└── README.md
+```
+
+## install.sh가 하는 일
+
+| 단계 | 내용 |
+|------|------|
+| 1 | tmux, xclip 설치 (없는 경우) |
+| 2 | `~/.tmux.conf` 복사 |
+| 3 | `~/.config/tmux/git-status.sh` 설치 |
+| 4 | TPM(Tmux Plugin Manager) 설치 |
+| 5 | 플러그인 자동 설치 (catppuccin, tmux-cpu, resurrect, continuum) |
+
+## 단축키
+
+### Prefix
+`Ctrl+Space`
+
+### Pane
+
+| 키 | 동작 |
+|---|---|
+| `Ctrl+Shift+←↑↓→` | Pane 이동 |
+| `Prefix + %` | 수평 분할 |
+| `Prefix + "` | 수직 분할 |
+| `Prefix + Tab` | yazi 파일 탐색기 (50% 분할) |
+
+### Window
+
+| 키 | 동작 |
+|---|---|
+| `Prefix + n` | 다음 Window |
+| `Prefix + p` | 이전 Window |
+| `Prefix + 0~9` | 번호로 이동 |
+| `Prefix + L` | 이전 Window로 복귀 |
+
+### 기타
+
+| 키 | 동작 |
+|---|---|
+| `Prefix + r` | 설정 리로드 |
+| Copy mode | `v` 선택, `y` 복사 (클립보드) |
+
+## Claude와 함께 사용하기
+
+### Claude Code (권장)
+
+이 repo 디렉토리를 열면 `CLAUDE.md`가 자동으로 로드됩니다.
+
+```bash
+cd ~/tmux-config
+claude  # Claude Code 실행 → CLAUDE.md 자동 인식
+```
+
+그 다음 Claude에게:
+```
+이 머신에 tmux 설정 설치해줘
+```
+
+### Claude.ai 웹
+
+`prompt.md` 파일의 내용을 복사해서 Claude에게 붙여넣으세요.
+
+```bash
+cat ~/tmux-config/prompt.md
+```
+
+## 설정 변경 후 동기화
+
+```bash
+# 현재 설정을 repo에 반영
+cp ~/.tmux.conf ~/tmux-config/.tmux.conf
+cp ~/.config/tmux/git-status.sh ~/tmux-config/scripts/git-status.sh
+
+cd ~/tmux-config
+git add -A && git commit -m "chore: update tmux config"
+git push
+```
+
+## 플러그인 목록
+
+| 플러그인 | 역할 |
+|---------|------|
+| [catppuccin/tmux](https://github.com/catppuccin/tmux) | Mocha 테마 |
+| [tmux-cpu](https://github.com/tmux-plugins/tmux-cpu) | CPU/RAM 표시 |
+| [tmux-resurrect](https://github.com/tmux-plugins/tmux-resurrect) | 세션 저장/복원 |
+| [tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | 자동 세션 저장 |
