@@ -5,7 +5,7 @@
 cd "$1" 2>/dev/null || exit
 
 b=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-[ -z "$b" ] && echo '-' && exit
+[ -z "$b" ] && exit
 
 # 5분마다 백그라운드 fetch (repo별 타임스탬프)
 root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -25,4 +25,4 @@ s=""
 [ -n "$a" ] && [ "$a" != "0" ] && s=" ↑$a"
 [ -n "$d" ] && [ "$d" != "0" ] && s="$s ↓$d"
 
-echo "$b$s"
+echo "#[bg=default] #[fg=#a6e3a1,bg=#313244]  $b$s "
