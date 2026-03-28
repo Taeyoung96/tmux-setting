@@ -7,7 +7,7 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${GREEN}[1/5] 의존성 확인 및 설치...${NC}"
+echo -e "${GREEN}[1/7] 의존성 확인 및 설치...${NC}"
 if ! command -v tmux &>/dev/null; then
     echo "  tmux가 없습니다. 설치 중..."
     sudo apt-get update -qq && sudo apt-get install -y tmux
@@ -24,22 +24,69 @@ if ! command -v git &>/dev/null; then
     sudo apt-get install -y git
 fi
 
-echo -e "${GREEN}[2/5] tmux.conf 복사...${NC}"
+echo -e "${GREEN}[2/7] Nerd Font 설치...${NC}"
+if fc-list | grep -qi "JetBrainsMono.*Nerd"; then
+    echo "  JetBrainsMono Nerd Font 이미 설치됨, 스킵"
+else
+    echo "  JetBrainsMono Nerd Font 설치 중..."
+    mkdir -p ~/.local/share/fonts
+    curl -fLo /tmp/JetBrainsMono.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+    tar -xf /tmp/JetBrainsMono.tar.xz -C ~/.local/share/fonts
+    fc-cache -fv >/dev/null 2>&1
+    rm -f /tmp/JetBrainsMono.tar.xz
+    echo "  Nerd Font 설치 완료"
+fi
+
+echo -e "${GREEN}[3/7] Terminator 폰트 설정...${NC}"
+TERM_CONFIG="$HOME/.config/terminator/config"
+if [ -f "$TERM_CONFIG" ]; then
+    if grep -q "font = JetBrainsMono Nerd Font" "$TERM_CONFIG"; then
+        echo "  Terminator 폰트 이미 설정됨, 스킵"
+    else
+        # [[default]] 프로필에 폰트 설정 추가
+        sed -i '/\[profiles\]/,/\[\[default\]\]/{/\[\[default\]\]/a\    font = JetBrainsMono Nerd Font 12\n    use_system_font = False
+}' "$TERM_CONFIG"
+        echo "  Terminator 폰트 설정 완료"
+    fi
+else
+    echo "  Terminator 설정 파일 생성 중..."
+    mkdir -p "$(dirname "$TERM_CONFIG")"
+    cat > "$TERM_CONFIG" <<'TERMCFG'
+[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    font = JetBrainsMono Nerd Font 12
+    use_system_font = False
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]
+TERMCFG
+    echo "  Terminator 설정 파일 생성 완료"
+fi
+
+echo -e "${GREEN}[4/7] tmux.conf 복사...${NC}"
 cp "$REPO_DIR/.tmux.conf" ~/.tmux.conf
 
-echo -e "${GREEN}[3/5] git-status.sh 설치...${NC}"
+echo -e "${GREEN}[5/7] git-status.sh 설치...${NC}"
 mkdir -p ~/.config/tmux
 cp "$REPO_DIR/scripts/git-status.sh" ~/.config/tmux/git-status.sh
 chmod +x ~/.config/tmux/git-status.sh
 
-echo -e "${GREEN}[4/5] TPM (Tmux Plugin Manager) 설치...${NC}"
+echo -e "${GREEN}[6/7] TPM (Tmux Plugin Manager) 설치...${NC}"
 if [ ! -d ~/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 else
     echo "  TPM 이미 설치됨, 스킵"
 fi
 
-echo -e "${GREEN}[5/5] TPM 플러그인 자동 설치...${NC}"
+echo -e "${GREEN}[7/7] TPM 플러그인 자동 설치...${NC}"
 # 기존 임시 세션 정리
 tmux kill-session -t _install 2>/dev/null || true
 
