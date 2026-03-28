@@ -18,10 +18,12 @@ bash install.sh
 
 이 스크립트가 자동으로 처리하는 것:
 1. tmux, xclip, git 설치 (없는 경우)
-2. `~/.tmux.conf` 복사
-3. `~/.config/tmux/git-status.sh` 설치 및 실행 권한 부여
-4. TPM(Tmux Plugin Manager) 설치
-5. catppuccin, tmux-cpu, tmux-resurrect, tmux-continuum, tmux-agent-pulse 플러그인 자동 설치
+2. JetBrainsMono Nerd Font 설치 (아이콘 깨짐 방지)
+3. Terminator 폰트 자동 설정 (`~/.config/terminator/config`)
+4. `~/.tmux.conf` 복사
+5. `~/.config/tmux/git-status.sh` 설치 및 실행 권한 부여
+6. TPM(Tmux Plugin Manager) 설치
+7. catppuccin, tmux-cpu, tmux-resurrect, tmux-continuum, tmux-agent-pulse 플러그인 자동 설치
 
 ## 주요 단축키
 
