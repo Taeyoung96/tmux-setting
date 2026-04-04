@@ -7,7 +7,7 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${GREEN}[1/7] 의존성 확인 및 설치...${NC}"
+echo -e "${GREEN}[1/8] 의존성 확인 및 설치...${NC}"
 if ! command -v tmux &>/dev/null; then
     echo "  tmux가 없습니다. 설치 중..."
     sudo apt-get update -qq && sudo apt-get install -y tmux
@@ -24,7 +24,7 @@ if ! command -v git &>/dev/null; then
     sudo apt-get install -y git
 fi
 
-echo -e "${GREEN}[2/7] Nerd Font 설치...${NC}"
+echo -e "${GREEN}[2/8] Nerd Font 설치...${NC}"
 if fc-list | grep -qi "JetBrainsMono.*Nerd"; then
     echo "  JetBrainsMono Nerd Font 이미 설치됨, 스킵"
 else
@@ -37,7 +37,7 @@ else
     echo "  Nerd Font 설치 완료"
 fi
 
-echo -e "${GREEN}[3/7] Terminator 폰트 설정...${NC}"
+echo -e "${GREEN}[3/8] Terminator 폰트 설정...${NC}"
 TERM_CONFIG="$HOME/.config/terminator/config"
 if [ -f "$TERM_CONFIG" ]; then
     if grep -q "font = JetBrainsMono Nerd Font" "$TERM_CONFIG"; then
@@ -71,22 +71,33 @@ TERMCFG
     echo "  Terminator 설정 파일 생성 완료"
 fi
 
-echo -e "${GREEN}[4/7] tmux.conf 복사...${NC}"
+echo -e "${GREEN}[4/8] tmux.conf 복사...${NC}"
 cp "$REPO_DIR/.tmux.conf" ~/.tmux.conf
 
-echo -e "${GREEN}[5/7] git-status.sh 설치...${NC}"
+echo -e "${GREEN}[5/8] git-status.sh 설치...${NC}"
 mkdir -p ~/.config/tmux
 cp "$REPO_DIR/scripts/git-status.sh" ~/.config/tmux/git-status.sh
 chmod +x ~/.config/tmux/git-status.sh
 
-echo -e "${GREEN}[6/7] TPM (Tmux Plugin Manager) 설치...${NC}"
+echo -e "${GREEN}[6/8] TPM (Tmux Plugin Manager) 설치...${NC}"
 if [ ! -d ~/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 else
     echo "  TPM 이미 설치됨, 스킵"
 fi
 
-echo -e "${GREEN}[7/7] TPM 플러그인 자동 설치...${NC}"
+echo -e "${GREEN}[7/8] git hook 설치...${NC}"
+HOOK_SRC="$REPO_DIR/scripts/hooks/post-merge"
+HOOK_DST="$REPO_DIR/.git/hooks/post-merge"
+if [ -f "$HOOK_DST" ] && diff -q "$HOOK_SRC" "$HOOK_DST" &>/dev/null; then
+    echo "  git hook 이미 설치됨, 스킵"
+else
+    cp "$HOOK_SRC" "$HOOK_DST"
+    chmod +x "$HOOK_DST"
+    echo "  git hook 설치 완료"
+fi
+
+echo -e "${GREEN}[8/8] TPM 플러그인 자동 설치...${NC}"
 # 기존 임시 세션 정리
 tmux kill-session -t _install 2>/dev/null || true
 
@@ -98,6 +109,7 @@ tmux kill-session -t _install 2>/dev/null || true
 
 echo -e "\n${GREEN}설치 완료!${NC}"
 echo -e "${YELLOW}새 터미널에서 tmux를 실행하거나, 이미 tmux 안에 있다면 'Prefix+r' 로 설정을 리로드하세요.${NC}"
+echo -e "${YELLOW}이제부터 git pull 시 tmux 설정이 자동으로 동기화됩니다.${NC}"
 echo ""
 echo "단축키 요약:"
 echo "  Prefix       : Ctrl+Space"
@@ -105,6 +117,9 @@ echo "  Pane 이동    : Ctrl+Shift+방향키"
 echo "  Window 이동  : Prefix+n/p, Prefix+L (이전)"
 echo "  설정 리로드  : Prefix+r"
 echo "  yazi         : Prefix+Tab"
+echo ""
+echo "설치된 항목:"
+echo "  - git hook: .git/hooks/post-merge (tmux 설정 자동 동기화)"
 echo ""
 echo "설치된 플러그인:"
 echo "  - catppuccin/tmux         (테마)"

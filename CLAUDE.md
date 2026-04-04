@@ -5,9 +5,10 @@
 ## 파일 구조
 
 ```
-.tmux.conf              # tmux 메인 설정
-scripts/git-status.sh   # status bar용 git 브랜치/ahead/behind 표시 스크립트
-install.sh              # 원커맨드 설치 스크립트
+.tmux.conf                      # tmux 메인 설정
+scripts/git-status.sh           # status bar용 git 브랜치/ahead/behind 표시 스크립트
+scripts/hooks/post-merge        # git post-merge hook: tmux 설정 자동 동기화
+install.sh                      # 원커맨드 설치 스크립트
 ```
 
 ## 새 머신에 설치하는 방법
@@ -23,7 +24,8 @@ bash install.sh
 4. `~/.tmux.conf` 복사
 5. `~/.config/tmux/git-status.sh` 설치 및 실행 권한 부여
 6. TPM(Tmux Plugin Manager) 설치
-7. catppuccin, tmux-cpu, tmux-resurrect, tmux-continuum, tmux-agent-pulse 플러그인 자동 설치
+7. git post-merge hook 설치 (`scripts/hooks/post-merge` → `.git/hooks/post-merge`)
+8. catppuccin, tmux-cpu, tmux-resurrect, tmux-continuum, tmux-agent-pulse 플러그인 자동 설치
 
 ## 주요 단축키
 

@@ -1,0 +1,44 @@
+#!/bin/bash
+# post-merge hook: tmux 설정 파일 자동 동기화
+
+REPO_DIR=$(cd "$(dirname "$0")/../.." && pwd)
+TMUX_CONF_SRC="$REPO_DIR/.tmux.conf"
+TMUX_CONF_DST="$HOME/.tmux.conf"
+GIT_STATUS_SRC="$REPO_DIR/scripts/git-status.sh"
+GIT_STATUS_DST="$HOME/.config/tmux/git-status.sh"
+
+TMUX_CONF_UPDATED=false
+
+# .tmux.conf 동기화
+if ! diff -q "$TMUX_CONF_SRC" "$TMUX_CONF_DST" &>/dev/null; then
+    cp "$TMUX_CONF_SRC" "$TMUX_CONF_DST"
+    echo "[tmux-sync] .tmux.conf 업데이트 완료"
+    TMUX_CONF_UPDATED=true
+else
+    echo "[tmux-sync] .tmux.conf 변경 없음"
+fi
+
+# git-status.sh 동기화
+if ! diff -q "$GIT_STATUS_SRC" "$GIT_STATUS_DST" &>/dev/null; then
+    mkdir -p "$(dirname "$GIT_STATUS_DST")"
+    cp "$GIT_STATUS_SRC" "$GIT_STATUS_DST"
+    chmod +x "$GIT_STATUS_DST"
+    echo "[tmux-sync] git-status.sh 업데이트 완료"
+else
+    echo "[tmux-sync] git-status.sh 변경 없음"
+fi
+
+# .tmux.conf 변경 시 플러그인 설치 및 설정 리로드
+if [ "$TMUX_CONF_UPDATED" = true ]; then
+    TPM_INSTALL="$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh"
+    if [ -x "$TPM_INSTALL" ]; then
+        "$TPM_INSTALL"
+    fi
+
+    if tmux list-sessions &>/dev/null 2>&1; then
+        tmux source-file "$TMUX_CONF_DST"
+        echo "[tmux-sync] tmux 설정 리로드 완료"
+    else
+        echo "[tmux-sync] tmux 미실행 중 — 다음 실행 시 새 설정이 적용됩니다"
+    fi
+fi
