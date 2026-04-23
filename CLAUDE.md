@@ -40,6 +40,19 @@ bash install.sh
 | `Prefix + %` | 수평 분할 |
 | `Prefix + "` | 수직 분할 |
 
+## 단축키 충돌 주의사항
+
+`Alt+방향키`를 tmux pane 이동에 사용합니다. 새 머신에 설치 시 아래 항목과 충돌 여부를 확인하세요:
+
+| 확인 대상 | 확인 방법 |
+|---|---|
+| GNOME | Settings > Keyboard Shortcuts에서 Alt+방향키 검색 |
+| Terminator | Preferences > Keybindings에서 확인 |
+| 기타 터미널 | 해당 터미널의 keybinding 설정 확인 |
+
+> 참고: Ubuntu + GNOME + Terminator 조합에서는 충돌 없음이 확인됨.
+> Terminator는 `Ctrl+Alt+방향키`를 사용하므로 `Alt+방향키`와 겹치지 않음.
+
 ## Status Bar
 
 오른쪽부터: `현재 디렉토리 | git브랜치 ↑ahead ↓behind | CPU% | RAM% | 날짜시간`
