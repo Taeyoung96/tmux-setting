@@ -32,7 +32,7 @@ bash install.sh
 | 키 | 동작 |
 |---|---|
 | `Ctrl+Space` | Prefix |
-| `Ctrl+Shift+방향키` | Pane 이동 |
+| `Alt+방향키` | Pane 이동 |
 | `Prefix + n/p` | 다음/이전 Window |
 | `Prefix + L` | 이전 Window로 복귀 |
 | `Prefix + r` | 설정 리로드 |
