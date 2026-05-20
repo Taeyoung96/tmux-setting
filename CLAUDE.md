@@ -26,6 +26,7 @@ bash install.sh
 6. TPM(Tmux Plugin Manager) 설치
 7. git post-merge hook 설치 (`scripts/hooks/post-merge` → `.git/hooks/post-merge`)
 8. catppuccin, tmux-cpu, tmux-resurrect, tmux-continuum, tmux-agent-pulse 플러그인 자동 설치
+   - tmux-agent-pulse: Claude Code / Codex / Hermes 응답 상태를 window 이름 아이콘으로 표시
 
 ## 주요 단축키
 
@@ -58,6 +59,22 @@ bash install.sh
 오른쪽부터: `현재 디렉토리 | git브랜치 ↑ahead ↓behind | CPU% | RAM% | 날짜시간`
 
 git 정보는 5분마다 자동 fetch하여 remote와의 차이를 표시합니다.
+
+## tmux-agent-pulse
+
+AI CLI 응답 상태를 tmux window 이름 아이콘으로 실시간 표시합니다.
+
+| 아이콘 | 상태 |
+|--------|------|
+| `💬` | responding — AI가 응답 생성 중 |
+| `✅` | done — 응답 완료, 확인 대기 |
+| `❓` | waiting — 사용자 확인(permission) 필요 |
+
+**지원 CLI:** Claude Code / Codex / Hermes
+
+- 감지 방식: pane 자식 프로세스 확인 + 화면 스냅샷 해시 비교
+- 플러그인 경로: `~/.tmux/plugins/tmux-agent-pulse/`
+- 소스: https://github.com/Taeyoung96/tmux-agent-pulse
 
 ## Claude에게 설치 요청하는 방법
 
