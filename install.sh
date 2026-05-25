@@ -54,6 +54,10 @@ else
     cat > "$TERM_CONFIG" <<'TERMCFG'
 [global_config]
 [keybindings]
+  go_up = <Alt>Up
+  go_down = <Alt>Down
+  go_left = <Alt>Left
+  go_right = <Alt>Right
 [profiles]
   [[default]]
     font = JetBrainsMono Nerd Font 12
@@ -69,6 +73,20 @@ else
 [plugins]
 TERMCFG
     echo "  Terminator 설정 파일 생성 완료"
+fi
+
+# keybinding 업데이트 (기존 설정 파일 포함)
+if grep -q "go_up" "$TERM_CONFIG"; then
+    sed -i \
+        -e 's|go_up = .*|go_up = <Alt>Up|' \
+        -e 's|go_down = .*|go_down = <Alt>Down|' \
+        -e 's|go_left = .*|go_left = <Alt>Left|' \
+        -e 's|go_right = .*|go_right = <Alt>Right|' \
+        "$TERM_CONFIG"
+    echo "  Terminator keybinding 업데이트 완료"
+else
+    sed -i '/^\[keybindings\]/a\  go_up = <Alt>Up\n  go_down = <Alt>Down\n  go_left = <Alt>Left\n  go_right = <Alt>Right' "$TERM_CONFIG"
+    echo "  Terminator keybinding 추가 완료"
 fi
 
 echo -e "${GREEN}[4/8] tmux.conf 복사...${NC}"

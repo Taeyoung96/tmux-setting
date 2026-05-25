@@ -33,7 +33,7 @@ bash install.sh
 | 키 | 동작 |
 |---|---|
 | `Ctrl+Space` | Prefix |
-| `Alt+방향키` | Pane 이동 |
+| `Alt+Shift+방향키` | Pane 이동 |
 | `Prefix + n/p` | 다음/이전 Window |
 | `Prefix + L` | 이전 Window로 복귀 |
 | `Prefix + r` | 설정 리로드 |
@@ -43,16 +43,18 @@ bash install.sh
 
 ## 단축키 충돌 주의사항
 
-`Alt+방향키`를 tmux pane 이동에 사용합니다. 새 머신에 설치 시 아래 항목과 충돌 여부를 확인하세요:
+`Alt+Shift+방향키`를 tmux pane 이동에 사용합니다. 새 머신에 설치 시 아래 항목과 충돌 여부를 확인하세요:
 
 | 확인 대상 | 확인 방법 |
 |---|---|
-| GNOME | Settings > Keyboard Shortcuts에서 Alt+방향키 검색 |
+| GNOME | Settings > Keyboard Shortcuts에서 Alt+Shift+방향키 검색 |
 | Terminator | Preferences > Keybindings에서 확인 |
 | 기타 터미널 | 해당 터미널의 keybinding 설정 확인 |
 
-> 참고: Ubuntu + GNOME + Terminator 조합에서는 충돌 없음이 확인됨.
-> Terminator는 `Ctrl+Alt+방향키`를 사용하므로 `Alt+방향키`와 겹치지 않음.
+> 참고: Ubuntu + GNOME + Terminator 조합에서 충돌 없음 확인됨.
+> - `Alt+방향키` → Terminator pane 이동
+> - `Alt+Shift+방향키` → tmux pane 이동
+> - `Ctrl+Alt+방향키` → GNOME workspace 이동
 
 ## Status Bar
 
